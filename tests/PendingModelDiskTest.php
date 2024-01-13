@@ -41,11 +41,11 @@ it('can save a disk', function (DiskConfig $config) {
     $pendingModelDisk->disk($config);
     $pendingModelDisk->save();
     $dataFromRepository = $model->data_repository(Disk::class);
-dd(
-    method_exists($config::class,'fromDataObjectModel') . ' ' . $config::class
-);
-       expect($dataFromRepository->first())->toBeInstanceOf(DataObject::class)
-           ->and($dataFromRepository->values())->toEqual($disk);
+    dd(
+        method_exists($config::class, 'fromDataObjectModel').' '.$config::class
+    );
+    expect($dataFromRepository->first())->toBeInstanceOf(DataObject::class)
+        ->and($dataFromRepository->values())->toEqual($disk);
 })->with([
     //'local' => fn () => new LocalConfig(root: storage_path('app/test')),
     'ftp' => fn () => new FtpConfig(

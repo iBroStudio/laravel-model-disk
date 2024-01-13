@@ -3,11 +3,9 @@
 namespace IBroStudio\ModelDisk\DataObjects;
 
 use IBroStudio\DataRepository\Models\DataObject;
-use IBroStudio\DataRepository\Transformers\EncryptableTextTransformer;
 use IBroStudio\DataRepository\ValueObjects\EncryptableText;
 use IBroStudio\ModelDisk\Contracts\DiskConfig;
 use IBroStudio\ModelDisk\Enums\DiskDriver;
-use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
 
 class FtpConfig extends Data implements DiskConfig
