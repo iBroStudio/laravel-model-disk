@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace IBroStudio\ModelDisk\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class ModelDiskCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-model-disk';
 
     public $description = 'My command';
 
