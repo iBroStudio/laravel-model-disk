@@ -2,20 +2,18 @@
 
 namespace IBroStudio\ModelDisk\DataObjects;
 
-use IBroStudio\DataRepository\Models\DataObject;
-use IBroStudio\DataRepository\ValueObjects\EncryptableText;
+use IBroStudio\DataRepository\DataObjects\DataRepository;
+use IBroStudio\DataRepository\ValueObjects\Authentication\BasicAuthentication;
 use IBroStudio\ModelDisk\Contracts\DiskConfig;
 use IBroStudio\ModelDisk\Enums\DiskDriver;
-use Spatie\LaravelData\Data;
 
-class FtpConfig extends Data implements DiskConfig
+class FtpConfig extends DataRepository implements DiskConfig
 {
     public string $driver;
 
     public function __construct(
         public string $host,
-        public string $username,
-        public EncryptableText $password,
+        public BasicAuthentication $authentication,
         // Optional FTP Settings...
         public int $port = 21,
         public string $root = '',
@@ -24,12 +22,5 @@ class FtpConfig extends Data implements DiskConfig
         public int $timeout = 30
     ) {
         $this->driver = DiskDriver::ftp;
-    }
-
-    public static function fromDataObjectModel(DataObject $dataObject): self
-    {
-        return new self(
-
-        );
     }
 }

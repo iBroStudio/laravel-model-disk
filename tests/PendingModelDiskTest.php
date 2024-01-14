@@ -1,10 +1,10 @@
 <?php
 
 use IBroStudio\DataRepository\Models\DataObject;
+use IBroStudio\DataRepository\ValueObjects\Authentication\S3Authentication;
 use IBroStudio\DataRepository\ValueObjects\EncryptableText;
 use IBroStudio\ModelDisk\Contracts\DiskConfig;
-use IBroStudio\ModelDisk\DataObjects\FtpConfig;
-use IBroStudio\ModelDisk\DataObjects\LocalConfig;
+use IBroStudio\ModelDisk\DataObjects\S3Config;
 use IBroStudio\ModelDisk\Enums\DiskDriver;
 use IBroStudio\ModelDisk\ModelDisk;
 use IBroStudio\ModelDisk\PendingDisk;
@@ -26,9 +26,7 @@ it('can instantiate a new disk', function (DiskConfig $config) {
             config: $config
         )
     );
-})->with([
-    fn () => new LocalConfig(root: storage_path('app/test')),
-]);
+})->with('disk-drivers');
 
 it('can save a disk', function (DiskConfig $config) {
     $model = ModelWithDisk::factory()->create();
@@ -41,19 +39,10 @@ it('can save a disk', function (DiskConfig $config) {
     $pendingModelDisk->disk($config);
     $pendingModelDisk->save();
     $dataFromRepository = $model->data_repository(Disk::class);
-    dd(
-        method_exists($config::class, 'fromDataObjectModel').' '.$config::class
-    );
+
     expect($dataFromRepository->first())->toBeInstanceOf(DataObject::class)
         ->and($dataFromRepository->values())->toEqual($disk);
-})->with([
-    //'local' => fn () => new LocalConfig(root: storage_path('app/test')),
-    'ftp' => fn () => new FtpConfig(
-        host: fake()->domainName(),
-        username: fake()->userName(),
-        password: EncryptableText::make(fake()->password()),
-    ),
-]);
+})->with('disk-drivers');
 
 it('can build a disk', function (DiskConfig $config) {
     $model = ModelWithDisk::factory()->create();
@@ -63,15 +52,20 @@ it('can build a disk', function (DiskConfig $config) {
     $pendingModelDisk->save();
 
     expect($pendingModelDisk->build())->toBeInstanceOf(Filesystem::class);
-})->with([
-    'local' => fn () => new LocalConfig(root: storage_path('app/test')),
-]);
+})->with('disk-drivers');
+
 /*
 it('can instantiate config', function () {
-    $config = new FtpConfig(
-        host: fake()->domainName(),
-        username: fake()->userName(),
-        password: EncryptableText::make(fake()->password()),
+
+    $config = new S3Config(
+        authentication: S3Authentication::make(
+            key: fake()->uuid(),
+            secret: EncryptableText::make(fake()->password())
+        ),
+        region: fake()->word(),
+        bucket: fake()->word(),
+        url: fake()->url()
     );
+    dd($config);
 });
 //*/

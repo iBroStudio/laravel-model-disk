@@ -39,7 +39,9 @@ class PendingDisk
         $disk = $this->model->data_repository(Disk::class)->values();
 
         return Storage::build(
-            $disk->config()->toArray()
+            $disk->config()
+                ->convertValueObjects()
+                ->toArray()
         );
     }
 

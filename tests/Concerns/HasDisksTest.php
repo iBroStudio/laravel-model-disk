@@ -1,9 +1,6 @@
 <?php
 
-use IBroStudio\DataRepository\ValueObjects\EncryptableText;
 use IBroStudio\ModelDisk\Contracts\DiskConfig;
-use IBroStudio\ModelDisk\DataObjects\FtpConfig;
-use IBroStudio\ModelDisk\DataObjects\LocalConfig;
 use IBroStudio\ModelDisk\Enums\DiskDriver;
 use IBroStudio\ModelDisk\Facades\ModelDisk;
 use IBroStudio\ModelDisk\PendingDisk;
@@ -36,14 +33,7 @@ it('can handle the disk attribute', function (DiskConfig $config) {
 
     ModelDisk::shouldReceive('for->build')
         ->once()
-        ->andReturnUsing(fn () => Storage::build($config->toArray()));
+        ->andReturnUsing(fn () => Storage::build($config->convertValueObjects()->toArray()));
 
     expect($model->disk)->toBeInstanceOf(Filesystem::class);
-})->with([
-    fn () => new LocalConfig(root: storage_path('app/test')),
-    fn () => new FtpConfig(
-        host: fake()->domainName(),
-        username: fake()->userName(),
-        password: EncryptableText::make(fake()->password())
-    ),
-]);
+})->with('disk-drivers');

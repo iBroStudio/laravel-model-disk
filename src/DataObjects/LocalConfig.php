@@ -2,12 +2,12 @@
 
 namespace IBroStudio\ModelDisk\DataObjects;
 
+use IBroStudio\DataRepository\DataObjects\DataRepository;
 use IBroStudio\ModelDisk\Contracts\DiskConfig;
 use IBroStudio\ModelDisk\Enums\DiskDriver;
 use League\Flysystem\Visibility;
-use Spatie\LaravelData\Data;
 
-class LocalConfig extends Data implements DiskConfig
+class LocalConfig extends DataRepository implements DiskConfig
 {
     public string $driver;
 
